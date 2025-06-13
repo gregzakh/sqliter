@@ -15,4 +15,6 @@ begin
   execute statement 'select gen_id(' || :gen_name ||
             ', 0) from rdb$database' into :gen_value;
   return :gen_value;
-end
+end#
+
+comment on function row_last is 'getting potential last row via generator'#
