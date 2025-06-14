@@ -6,7 +6,7 @@ as
 begin
   return (select rdb$character_set_name
           from rdb$character_sets
-          where rdn$character_set_id = :charset_id);
+          where rdb$character_set_id = :charset_id);
 end#
 
 comment on function get_charset_name
