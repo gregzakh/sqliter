@@ -1,1 +1,1 @@
-Funny scripts stored in DBeaver
+SQL: frivolously about serious
