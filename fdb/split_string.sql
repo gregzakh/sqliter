@@ -28,7 +28,7 @@ begin
 end#
 
 comment on procedure split_string
-is 'splits a string into substrings relative to the specified separaor'#
+is 'splits a string into substrings relative to the specified separator'#
 -- depends on the previous procedure
 create or alter procedure split_string_ex(
   input_string varchar(4096),
