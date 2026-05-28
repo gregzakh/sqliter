@@ -1,1 +1,3 @@
-SQL: frivolously about serious
+#SQLiter🍺
+
+Collection of various SQL scripts.
