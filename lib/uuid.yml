@@ -1,0 +1,51 @@
+sqlet:
+    meta:
+        description: >
+            Generates a UUID and returns it as a lowercase string in standard UUID format.
+        tags: [uuid]
+    scripts:
+        - engine: pg
+          script: select uuidv7();
+
+        - engine: my
+          script: select uuid();
+
+        - engine: ms
+          script: select lower(newid());
+
+        - engine: ora
+          remark: used v21
+          script: |
+            select regexp_replace(
+               lower(standard_hash(sys_guid())),
+               '(.{8})(.{4})(.{4})(.{4})(.{12}).*',
+               '\1-\2-\3-\4-\5'
+            ) uuid
+            from dual;
+
+        - engine: sqlite
+          script: |
+            with
+               cte(a, b) as (
+                  values(1,8),(9,4),(13,4),(17,4),(21,12)
+               ),
+               raw(c) as (
+                  select lower(hex(randomblob(16)))
+               )
+            select group_concat(substr((select c from raw), a, b), '-') uuid
+            from cte;
+
+        - engine: db2
+          remark: used v11
+          script: |
+            select regexp_replace(
+               lower(hex(hash(generate_unique(), 2))),
+               '(.{8})(.{4})(.{4})(.{4})(.{12}).*',
+               '\1-\2-\3-\4-\5'
+            ) uuid
+            from sysibm.sysdummy1;
+
+        - engine: fdb
+          script: |
+            select lower(uuid_to_char(gen_uuid())) uuid
+            from rdb$database;
