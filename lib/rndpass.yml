@@ -1,0 +1,15 @@
+sqlet:
+    meta:
+        description: >
+            Generate a secure-looking random password by shuffling printable
+            ASCII characters and returning the first characters.
+        tags: [password, random]
+    scripts:
+        - engine: sqlite
+          script: |
+            select substr(
+                group_concat(
+                    char(value), '' order by random()
+                ), 1, 13
+            )
+            from generate_series(33, 122);
