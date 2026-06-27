@@ -1,0 +1,19 @@
+sqlet:
+    meta:
+        description: >
+            Checks whether a phrase is a palindrome, ignoring case and
+            non-letter characters.
+        tags: [text, palindrome]
+    scripts:
+        - engine: sqlite
+          script: |
+            .param set $phrase "Madam, I'm Adam"
+
+            with chars(i, c) as (
+                select value, lower(substr($phrase, value, 1))
+                from generate_series(1, length($phrase))
+            )
+            select group_concat(c, '' order by i desc) =
+                   group_concat(c, '')
+            from chars
+            where c glob '[a-z]';
