@@ -1,0 +1,19 @@
+sqlet:
+    meta:
+        description: >
+            Checks wheater two words are anagram.
+        tags: [words, anagram]
+    scripts:
+        - engine: sqlite
+          script: |
+            select length('listen') = length('silent')
+               and (
+                  with chars as (
+                     select substr('listen', value, 1) w1,
+                            substr('silent', value, 1) w2
+                     from generate_series(1, length('listen'))
+                  )
+                  select group_concat(w1, '' order by w1) =
+                         group_concat(w2, '' order by w2)
+                  from chars
+               );
