@@ -1,7 +1,7 @@
 sqlet:
     meta:
         description: >
-            Checks wheater two words are anagram.
+            Checks whether two words are anagram.
         tags: [words, anagram]
     scripts:
         - engine: sqlite
