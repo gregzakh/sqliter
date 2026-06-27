@@ -2,7 +2,7 @@ sqlet:
     meta:
         description: >
             Generate a secure-looking random password by shuffling printable
-            ASCII characters and returning the first characters.
+            ASCII characters and returning the first 13 characters.
         tags: [password, random]
     scripts:
         - engine: sqlite
