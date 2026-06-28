@@ -1,15 +1,16 @@
 sqlet:
     meta:
         description: >
-            Generate a secure-looking random password by shuffling printable
-            ASCII characters and returning the first 13 characters.
+            Generate a secure-looking random password by shuffling printable ASCII
+            characters and returning the first 13 characters.
         tags: [password, random]
     scripts:
+        - engine: pg
+          script: |
+            select substr(string_agg(chr(v), '' order by random()), 1, 13)
+            from generate_series(33, 122) v;
+
         - engine: sqlite
           script: |
-            select substr(
-                group_concat(
-                    char(value), '' order by random()
-                ), 1, 13
-            )
+            select substr(group_concat(char(value), '' order by random()), 1, 13)
             from generate_series(33, 122);
