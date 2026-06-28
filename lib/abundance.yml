@@ -1,0 +1,12 @@
+sqlet:
+    meta:
+        description: >
+            Checks if the given number is abundant (by summing its proper divisors).
+        tags: [number, abundant]
+    scripts:
+        - engine: sqlite
+          script: |
+            .param set $num 945
+
+            select sum(iif(mod($num, value) = 0, value, 0)) > $num
+            from generate_series(1, $num - 1);
