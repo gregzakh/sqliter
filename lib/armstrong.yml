@@ -1,0 +1,12 @@
+sqlet:
+    meta:
+        description: >
+            Checks if the given number is Armstrong (narcissistic).
+        tags: [number, armstrong]
+    scripts:
+        - engine: sqlite
+          script: |
+            .param set $num 1634
+
+            select sum(power(substr($num, value, 1), length($num))) = $num
+            from generate_series(1, length($num));
