@@ -1,0 +1,11 @@
+sqlet:
+    meta:
+        description: >
+            Calculates a database size in Kb, Mb and Gb.
+        tags: []
+    scripts:
+        - engine: sqlite
+          script: |
+            select round(page_count * page_size / column1, 1) sz
+            from pragma_page_count(), pragma_page_size(),
+                 (values (1024.0), (1048576.0), (1073741824.0));
