@@ -1,3 +1,3 @@
 # SQLiter🍺
 
-Solving urgent and non-urgent problems, researching a balance between brevity and efficiency.
+Solving urgent and non-urgent SQL tasks, researching a balance between brevity and efficiency.
