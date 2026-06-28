@@ -2,7 +2,7 @@ sqlet:
     meta:
         description: >
             Calculates a database size in Kb, Mb and Gb.
-        tags: []
+        tags: [database, size]
     scripts:
         - engine: sqlite
           script: |
