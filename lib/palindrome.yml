@@ -5,6 +5,16 @@ sqlet:
             non-letter characters.
         tags: [text, palindrome]
     scripts:
+        - engine: pg
+          script: |
+            do $$
+            declare
+                phrase text := 'Madam, I''m Adam';
+            begin
+                phrase = lower(regexp_replace(phrase, '[^a-z]+', '', 'ig'));
+                raise notice '%', reverse(phrase) = phrase;
+            end $$;
+
         - engine: sqlite
           script: |
             .param set $phrase "Madam, I'm Adam"
