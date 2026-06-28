@@ -1,3 +1,3 @@
 # SQLiter🍺
 
-Collection of various SQL scripts.
+Solving urgent and non-urgent problems, researching a balance between brevity and efficiency.
