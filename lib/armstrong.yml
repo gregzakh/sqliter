@@ -4,9 +4,58 @@ sqlet:
             Checks if the given number is Armstrong (narcissistic).
         tags: [number, armstrong]
     scripts:
+        - engine: pg
+          script: |
+            do $$
+            declare
+                val int := 1634;
+                len int := length(val::text);
+            begin
+                raise notice '%', (
+                    select sum(power(substr(val::text, v, 1)::int, len)) = val
+                    from generate_series(1, len)v
+                );
+            end $$;
+
+        - engine: my
+          script: |
+            set @num := 1634;
+
+            select sum(power(substr(@num, v, 1), length(@num))) = @num
+            from (
+                select row_number() over() v
+                from information_schema.tables
+            ) v
+            where v.v <= length(@num);
+
+        - engine: ms
+          script: |
+            declare @num int = 1634;
+            declare @len int = len(@num);
+
+            select iif(sum(power(substring(concat('', @num), value, 1), @len)) = @num, 1, 0)
+            from generate_series(1, @len);
+
         - engine: sqlite
           script: |
             .param set $num 1634
 
             select sum(power(substr($num, value, 1), length($num))) = $num
             from generate_series(1, length($num));
+
+        - engine: fdb
+          script: |
+            execute block
+            returns (armstrong boolean)
+            as
+                declare variable val integer = 1634;
+                declare variable len integer;
+            begin
+                len = char_length(val);
+                select sum(power(substring(:val from v for 1), :len)) = :val
+                from (
+                    select row_number() over() v
+                    from rdb$relations rows :len
+                ) into :armstrong;
+                suspend;
+            end;
