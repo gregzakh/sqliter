@@ -36,12 +36,33 @@ sqlet:
             select iif(sum(power(substring(concat('', @num), value, 1), @len)) = @num, 1, 0)
             from generate_series(1, @len);
 
+        - engine: ora
+          script: |
+            declare
+                num number := 1634;
+                res number;
+            begin
+                select sum(power(substr(num, level, 1), length(num)))
+                into res from dual connect by level <= length(num);
+
+                dbms_output.put_line(case when res = num then 1 else 0 end);
+            end;
+
         - engine: sqlite
           script: |
             .param set $num 1634
 
             select sum(power(substr($num, value, 1), length($num))) = $num
             from generate_series(1, length($num));
+
+        - engine: db2
+          remark: run with DBeaver
+          script: |
+            select sum(power(substr(:num, n, 1), length(:num))) = :num
+            from (
+                select row_number() over() from syscat.tables
+            ) t(n)
+            where n <= length(:num);
 
         - engine: fdb
           script: |
