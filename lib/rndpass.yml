@@ -10,6 +10,13 @@ sqlet:
             select substr(string_agg(chr(v), '' order by random()), 1, 13)
             from generate_series(33, 122) v;
 
+        - engine: ora
+          script: |
+            select substr(replace(
+                dbms_random.string('p', 90), ' ', ''
+            ), 1, 13)
+            from dual;
+
         - engine: sqlite
           script: |
             select substr(group_concat(char(value), '' order by random()), 1, 13)
