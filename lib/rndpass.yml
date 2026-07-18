@@ -7,7 +7,7 @@ sqlet:
     scripts:
         - engine: pg
           script: |
-            select substr(string_agg(chr(v), '' order by random()), 1, 13)
+            select left(string_agg(chr(v), '' order by random()), 13)
             from generate_series(33, 122) v;
 
         - engine: my
@@ -17,9 +17,7 @@ sqlet:
 
         - engine: ms
           script: |
-            select substring(
-                string_agg(char(value), '') within group (order by newid()),
-            1, 13)
+            select left(string_agg(char(value), '') within group (order by newid()), 13)
             from generate_series(33, 122);
 
         - engine: ora
@@ -32,9 +30,16 @@ sqlet:
             select substr(group_concat(char(value), '' order by random()), 1, 13)
             from generate_series(33, 122);
 
+        - engine: db2
+          script: |
+            select left(listagg(
+                chr(33 + cast(rand() * 90 as integer)), ''
+            ) within group (order by rand()), 13)
+            from syscat.tables;
+
         - engine: fdb
           script: |
-            select substring(list(
+            select left(list(
                 ascii_char(33 + cast(rand() * 90 as integer)), ''
-            ) from 1 for 13)
+            ), 13)
             from rdb$relation_fields;
