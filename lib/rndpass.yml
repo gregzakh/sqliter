@@ -12,9 +12,7 @@ sqlet:
 
         - engine: ora
           script: |
-            select substr(replace(
-                dbms_random.string('p', 90), ' ', ''
-            ), 1, 13)
+            select substr(replace(dbms_random.string('p', 90), ' ', ''), 1, 13)
             from dual;
 
         - engine: sqlite
