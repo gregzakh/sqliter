@@ -10,6 +10,13 @@ sqlet:
             select substr(string_agg(chr(v), '' order by random()), 1, 13)
             from generate_series(33, 122) v;
 
+        - engine: ms
+          script: |
+            select substring(
+                string_agg(char(value), '') within group (order by newid()),
+            1, 13)
+            from generate_series(33, 122);
+
         - engine: ora
           script: |
             select substr(replace(dbms_random.string('p', 90), ' ', ''), 1, 13)
