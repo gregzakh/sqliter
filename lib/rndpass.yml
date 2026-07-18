@@ -10,6 +10,11 @@ sqlet:
             select substr(string_agg(chr(v), '' order by random()), 1, 13)
             from generate_series(33, 122) v;
 
+        - engine: my
+          script: |
+            select left(group_concat(char(33 + rand() * 90) separator ''), 13)
+            from information_schema.statistics;
+
         - engine: ms
           script: |
             select substring(
