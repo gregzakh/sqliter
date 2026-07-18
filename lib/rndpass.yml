@@ -14,3 +14,10 @@ sqlet:
           script: |
             select substr(group_concat(char(value), '' order by random()), 1, 13)
             from generate_series(33, 122);
+
+        - engine: fdb
+          script: |
+            select substring(list(
+                ascii_char(33 + cast(rand() * 90 as integer)), ''
+            ) from 1 for 13)
+            from rdb$relation_fields;
