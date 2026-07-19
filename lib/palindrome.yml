@@ -15,6 +15,21 @@ sqlet:
                 raise notice '%', reverse(phrase) = phrase;
             end $$;
 
+        - engine: ms
+          remark: 2022
+          script: |
+            declare @str varchar(15) = 'Madam, I''m Adam';
+
+            with chars(i, c) as (
+                select value, lower(substring(@str, value, 1))
+                from generate_series(1, len(@str))
+            )
+            select iif(string_agg(c, '') within group (order by i desc) =
+                       string_agg(c, ''), 1, 0
+            )
+            from chars
+            where c like '[a-z]';
+
         - engine: sqlite
           script: |
             .param set $phrase "Madam, I'm Adam"
