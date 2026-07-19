@@ -15,6 +15,12 @@ sqlet:
                 raise notice '%', reverse(phrase) = phrase;
             end $$;
 
+        - engine: my
+          script: |
+            set @phrase = "Madam, I'm Adam";
+            set @purified = lower(regexp_replace(@phrase, '[^a-z]', ''));
+            select reverse(@purified) = @purified;
+
         - engine: ms
           remark: 2022
           script: |
