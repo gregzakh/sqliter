@@ -37,6 +37,7 @@ sqlet:
             where c like '[a-z]';
 
         - engine: ora
+          remark: v21
           script: |
             declare
                 str varchar2(15) := 'Madam, I''m Adam';
