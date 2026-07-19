@@ -36,6 +36,21 @@ sqlet:
             from chars
             where c like '[a-z]';
 
+        - engine: ora
+          script: |
+            declare
+                str varchar2(15) := 'Madam, I''m Adam';
+                res varchar2(15);
+            begin
+                str := regexp_replace(lower(str), '[^a-z]+', '');
+                select listagg(substr(str, level, 1), '')
+                       within group (order by level desc)
+                into res
+                from dual
+                connect by level <= length(str);
+                dbms_output.put_line(case when str = res then 1 else 0 end);
+            end;
+
         - engine: sqlite
           script: |
             .param set $phrase "Madam, I'm Adam"
