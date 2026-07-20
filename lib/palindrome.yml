@@ -64,3 +64,35 @@ sqlet:
                    group_concat(c, '')
             from chars
             where c glob '[a-z]';
+
+        - engine: db2
+          script: |
+            with t(txt) as (
+                values regexp_replace(lower('Madam, I''m Adam'), '[^a-z]', '')
+            )
+            select min(substr(txt, num, 1) = substr(txt, length(txt) - num + 1, 1))
+            from t, (
+                select row_number() over() from syscat.tables
+            ) as t(num)
+            where num <= length(txt);
+
+        - engine: fdb
+          script: |
+            with
+            v(txt) as (
+                select lower('Madam, I''m Adam')
+                from rdb$database
+            ),
+            t(a, b) as (
+                select substring(txt from num for 1) a,
+                       substring(txt from char_length(txt) - num + 1 for 1) b
+                from v, (
+                    select row_number() over() num
+                    from rdb$relation_fields
+                    rows (select char_length(txt) from v)
+                )
+            )
+            select min(a = b)
+            from t
+            where a similar to '[a-z]'
+              and b similar to '[a-z]';
