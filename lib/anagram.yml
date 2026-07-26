@@ -1,9 +1,26 @@
 sqlet:
     meta:
         description: >
-            Checks whether two words are anagram.
+            Checks whether two words are anagram. Both strings are assumed
+            to be lowercase.
         tags: [words, anagram]
     scripts:
+        - engine: pg
+          script: |
+            do $$
+            declare
+               a1 text := 'listen';
+               a2 text := 'silent';
+            begin
+               raise notice '%', (length(a1) = length(a2) and (
+                  select not exists (
+                     select unnest(string_to_array(a1, null))
+                     except all
+                     select unnest(string_to_array(a2, null))
+                  )
+               ));
+            end $$;
+
         - engine: sqlite
           script: |
             select length('listen') = length('silent')
